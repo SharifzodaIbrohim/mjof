@@ -1,26 +1,27 @@
 /* ============================================================
    M.J.O.F — Маҷмӯаи Олимпиадаҳои Фаннӣ
-   Professional white design system (NOT Geografia)
+   Professional soft-gray design (NOT Geografia)
    ============================================================ */
 
 :root {
-  --pf-bg: #ffffff;
-  --pf-bg-elevated: #f8fafc;
-  --pf-panel: #ffffff;
-  --pf-panel-2: #f1f5f9;
-  --pf-line: #e2e8f0;
+  --pf-bg: #e8ecf1;
+  --pf-bg-elevated: #f1f4f8;
+  --pf-panel: #f7f9fc;
+  --pf-panel-2: #e2e8f0;
+  --pf-line: # recyc;
+  --pf-line: #cfd8e3;
   --pf-text: #0f172a;
-  --pf-muted: #64748b;
-  --pf-faint: #94a3b8;
+  --pf-muted: #5b6b7c;
+  --pf-faint: #8494a7;
   --pf-accent: #1d4ed8;
-  --pf-accent-dim: rgba(29, 78, 216, 0.08);
+  --pf-accent-dim: rgba(29, 78, 216, 0.1);
   --pf-accent-strong: #1e40af;
   --pf-ok: #059669;
   --pf-warn: #d97706;
   --pf-radius: 12px;
   --pf-radius-sm: 8px;
   --pf-top: 64px;
-  --pf-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.04);
+  --pf-shadow: 0 1px 2px rgba(15, 23, 42, 0.05), 0 4px 14px rgba(15, 23, 42, 0.06);
   --pf-font: "Segoe UI", Inter, system-ui, -apple-system, sans-serif;
 }
 
@@ -49,7 +50,6 @@ body {
   line-height: 1.5;
 }
 
-/* —— Top bar —— */
 .pf-topbar {
   position: sticky;
   top: 0;
@@ -59,13 +59,11 @@ body {
   align-items: center;
   gap: 1.25rem;
   padding: 0 1.5rem;
-  background: #ffffff;
+  background: #f0f3f7;
   border-bottom: 1px solid var(--pf-line);
   box-shadow: 0 1px 0 rgba(15, 23, 42, 0.04);
 }
-body.dark-theme .pf-topbar {
-  background: var(--pf-panel);
-}
+body.dark-theme .pf-topbar { background: var(--pf-panel); }
 
 .pf-brand {
   display: flex;
@@ -96,9 +94,7 @@ body.dark-theme .pf-topbar {
   flex-direction: column;
   line-height: 1.15;
 }
-.pf-brand-text strong {
-  font-size: 0.92rem;
-}
+.pf-brand-text strong { font-size: 0.92rem; }
 .pf-brand-text span {
   font-size: 0.7rem;
   font-weight: 500;
@@ -154,22 +150,9 @@ body.dark-theme .pf-topbar {
   background: var(--pf-panel-2);
   color: var(--pf-text);
 }
-.pf-avatar {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--pf-accent);
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
-  font-size: 0.85rem;
-  text-decoration: none;
-  overflow: hidden;
-}
 .pf-lang {
   appearance: none;
-  background: var(--pf-panel-2);
+  background: var(--pf-panel);
   color: var(--pf-text);
   border: 1px solid var(--pf-line);
   border-radius: 8px;
@@ -179,7 +162,6 @@ body.dark-theme .pf-topbar {
   cursor: pointer;
 }
 
-/* —— Dashboard —— */
 .pf-dash {
   max-width: 1120px;
   margin: 0 auto;
@@ -209,7 +191,7 @@ body.dark-theme .pf-topbar {
 
 .pf-metrics {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
@@ -255,15 +237,8 @@ body.dark-theme .pf-topbar {
   border-bottom: 1px solid var(--pf-line);
   background: var(--pf-bg-elevated);
 }
-.pf-panel-head h2 {
-  margin: 0;
-  font-size: 0.95rem;
-  font-weight: 700;
-}
-.pf-panel-title {
-  font-size: 0.95rem;
-  font-weight: 700;
-}
+.pf-panel-head h2 { margin: 0; font-size: 0.95rem; font-weight: 700; }
+.pf-panel-title { font-size: 0.95rem; font-weight: 700; }
 .pf-panel-head a {
   color: var(--pf-accent);
   text-decoration: none;
@@ -283,7 +258,7 @@ body.dark-theme .pf-topbar {
 .pf-empty .ico {
   font-size: 1.6rem;
   margin-bottom: 0.4rem;
-  opacity: 0.7;
+  opacity: 0.65;
 }
 
 .pf-feat-wrap { margin-top: 0.5rem; }
@@ -358,7 +333,6 @@ body.dark-theme .pf-topbar {
 }
 .hidden { display: none !important; }
 
-/* Cards */
 .pf-card {
   display: block;
   background: var(--pf-panel);
@@ -396,19 +370,6 @@ body.dark-theme .pf-topbar {
   border-radius: 999px;
 }
 
-.pf-act {
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.7rem 0;
-  border-bottom: 1px solid var(--pf-line);
-}
-.pf-act:last-child { border-bottom: 0; }
-.pf-act-main { font-size: 0.92rem; }
-.pf-act-main .ok { color: var(--pf-ok); }
-.pf-act-meta { color: var(--pf-muted); font-size: 0.78rem; margin-top: 0.15rem; }
-.pf-act-time { color: var(--pf-faint); font-size: 0.75rem; white-space: nowrap; }
-
 .pf-lb-row {
   display: flex;
   align-items: center;
@@ -421,14 +382,13 @@ body.dark-theme .pf-topbar {
 .pf-lb-name { flex: 1; }
 .pf-lb-score { font-weight: 700; }
 
-/* Hero strip */
 .mjof-hero {
-  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #3b82f6 100%);
+  background: linear-gradient(135deg, #1e3a8a 0%, #1d4ed8 55%, #2563eb 100%);
   color: #fff;
   border-radius: var(--pf-radius);
   padding: 1.75rem 1.5rem;
   margin-bottom: 1.75rem;
-  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.2);
+  box-shadow: 0 8px 24px rgba(29, 78, 216, 0.18);
 }
 .mjof-hero h1 {
   margin: 0 0 0.4rem;
@@ -444,6 +404,13 @@ body.dark-theme .pf-topbar {
   line-height: 1.5;
 }
 
+/* Shared nav for all public pages */
+.mjof-nav-only .pf-nav a[href*="countries"],
+.mjof-nav-only .pf-nav a[href*="quiz"],
+.mjof-nav-only .pf-nav a[href*="profile"] {
+  display: none !important;
+}
+
 @media (max-width: 900px) {
   .pf-metrics { grid-template-columns: 1fr 1fr; }
   .pf-workspace { grid-template-columns: 1fr; }
@@ -455,7 +422,7 @@ body.dark-theme .pf-topbar {
 }
 
 @media (max-width: 480px) {
-  .pf-metrics { grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+  .pf-metrics { grid-template-columns: 1fr; gap: 0.6rem; }
   .pf-metric-value { font-size: 1.2rem; }
   .pf-nav a { padding: 0.45rem 0.6rem; font-size: 0.82rem; }
 }
