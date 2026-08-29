@@ -1,4 +1,4 @@
-"""Geografia entry — Phase A: plain server_core.py preferred (no network at boot)."""
+"""M.J.O.F entry — Phase A: plain server_core.py preferred (no network at boot)."""
 from __future__ import annotations
 
 import base64
@@ -61,11 +61,12 @@ if app is None:
 
 print(f"[boot] mode={_boot_mode}")
 
+# M.J.O.F public pages — бе countries / quiz / profile
 _EXTRA_PUBLIC = {
-    "index.html", "admin.html", "student.html", "profile.html", "quiz.html",
-    "courses.html", "leaderboard.html", "countries.html", "css.css",
-    "css/admin.css", "css/student.css", "css/quiz.css", "css/platform.css", "css/profile.css",
-    "js.js", "js/i18n.js", "js/platform-home.js", "js/quiz-platform.js", "js/profile.js",
+    "index.html", "admin.html", "student.html",
+    "courses.html", "leaderboard.html", "css.css",
+    "css/admin.css", "css/student.css", "css/platform.css",
+    "js.js", "js/i18n.js", "js/platform-home.js", "js/platform.js",
     "js/admin.js", "js/admin-session.js", "js/admin-fixes.js", "js/admin-gmail.js",
     "js/admin-content.js", "js/admin-leaderboard.js", "js/admin-olympiad.js",
     "js/admin-students-reg.js", "js/admin-davotnoma-print.js", "js/admin-rbac-ui.js", "js/admin-audit.js", "js/student.js",
@@ -81,11 +82,19 @@ try:
     g = globals()
     if "PUBLIC_PATHS" in g and isinstance(g["PUBLIC_PATHS"], set):
         g["PUBLIC_PATHS"].update(_EXTRA_PUBLIC)
+        # remove legacy Geografia pages if present
+        for legacy in ("countries.html", "quiz.html", "profile.html", "css/quiz.css", "css/profile.css",
+                       "js/quiz-platform.js", "js/profile.js"):
+            g["PUBLIC_PATHS"].discard(legacy)
         print("[boot] PUBLIC_PATHS set += extras (%d)" % len(g["PUBLIC_PATHS"]))
     if app is not None and hasattr(app, "config"):
         existing = set(app.config.get("PUBLIC_PATHS") or [])
-        app.config["PUBLIC_PATHS"] = existing | _EXTRA_PUBLIC
-        print("[boot] PUBLIC_PATHS: current static set OK")
+        cleaned = (existing | _EXTRA_PUBLIC) - {
+            "countries.html", "quiz.html", "profile.html",
+            "css/quiz.css", "css/profile.css", "js/quiz-platform.js", "js/profile.js",
+        }
+        app.config["PUBLIC_PATHS"] = cleaned
+        print("[boot] PUBLIC_PATHS: M.J.O.F static set OK")
 except Exception as e:
     print("[boot] PUBLIC_PATHS merge failed:", e)
 
@@ -132,7 +141,7 @@ _boot_patch("patch_admin_export", "patch_admin_export", "db.patch_admin_export")
 
 
 def _install_safety_net() -> None:
-    from flask import request
+    from flask import request, redirect
     if "student_login" in app.view_functions:
         _orig = app.view_functions["student_login"]
         def student_login_safe():
@@ -146,7 +155,18 @@ def _install_safety_net() -> None:
             return _orig()
         app.view_functions["student_login"] = student_login_safe
         print("[boot] safety-net: student_login id|studentId|code")
-    print("[boot] safety-net OK")
+
+    # Redirect legacy Geografia paths → home
+    @app.route("/countries")
+    @app.route("/countries.html")
+    @app.route("/quiz")
+    @app.route("/quiz.html")
+    @app.route("/profile")
+    @app.route("/profile.html")
+    def _mjof_legacy_gone():
+        return redirect("/", code=302)
+
+    print("[boot] safety-net OK + legacy redirects")
 
 try:
     _install_safety_net()
