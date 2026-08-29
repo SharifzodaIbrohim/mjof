@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Маҷмӯаи Олимпиадаҳои Фаннӣ (M.J.O.F)</title>
-  <meta name="description" content="Маҷмӯаи Олимпиадаҳои Фаннӣ — платформаи расмии олимпиадаҳо аз фанҳои гуногун" />
+  <meta name="description" content="Маҷмӯаи Олимпиадаҳои Фаннӣ — платформаи расмии олимпиадаҳо" />
   <link rel="stylesheet" href="css/platform.css" />
 </head>
 <body class="pf-page-home">
@@ -21,7 +21,6 @@
       <a href="/student">Олимпиадаҳо</a>
       <a href="/leaderboard">Рейтинг</a>
       <a href="/courses">Хабарҳо</a>
-      <a href="/profile">Профил</a>
     </nav>
     <div class="pf-actions">
       <select id="pfLang" class="pf-lang" title="Забон" aria-label="Language">
@@ -31,7 +30,6 @@
       </select>
       <button type="button" class="pf-icon-btn" id="pfNotif" title="Огоҳӣ">🔔</button>
       <button type="button" class="pf-icon-btn" id="pfTheme" title="Тема">🌙</button>
-      <a class="pf-avatar" id="pfAvatar" href="/profile" title="Профил">М</a>
     </div>
   </header>
 
@@ -43,7 +41,7 @@
   <main id="pfHome" class="pf-dash">
     <div class="mjof-hero">
       <h1>Маҷмӯаи Олимпиадаҳои Фаннӣ</h1>
-      <p>Платформаи расмии олимпиадаҳо ва викторинаҳо аз фанҳои русӣ, англисӣ, химия, физика ва дигар фанҳо.</p>
+      <p>Платформаи расмии олимпиадаҳо аз фанҳои русӣ, англисӣ, химия, физика ва дигар фанҳо.</p>
     </div>
 
     <p class="pf-kicker">Фаъолияти платформа</p>
@@ -58,10 +56,6 @@
       <div>
         <span class="pf-metric-label">Хонандагон</span>
         <span class="pf-metric-value" id="pfMStudents">—</span>
-      </div>
-      <div>
-        <span class="pf-metric-label">Викторинаҳо</span>
-        <span class="pf-metric-value" id="pfMQuizzes">—</span>
       </div>
       <div>
         <span class="pf-metric-label">Фанҳо</span>
@@ -79,35 +73,20 @@
           </div>
         </div>
         <div class="pf-panel-body" id="pfActivityFeed">
-          <div class="pf-empty">
-            <div class="ico">📋</div>
-            <span>Фаъолият ҳоло нест</span>
-          </div>
+          <div class="pf-empty"><div class="ico">📋</div><span>Фаъолият ҳоло нест</span></div>
         </div>
       </div>
       <div class="pf-side">
         <div class="pf-panel">
-          <div class="pf-panel-head">
-            <h2>Олимпиадаҳо</h2>
-            <a href="/student">Ҳама →</a>
-          </div>
+          <div class="pf-panel-head"><h2>Олимпиадаҳо</h2><a href="/student">Ҳама →</a></div>
           <div class="pf-panel-body" id="pfUpcomingBox">
-            <div class="pf-empty">
-              <div class="ico">🏆</div>
-              <span>Олимпиадаи фаъол нест</span>
-            </div>
+            <div class="pf-empty"><div class="ico">🏆</div><span>Олимпиадаи фаъол нест</span></div>
           </div>
         </div>
-        <div class="pf-panel" id="leaderboard">
-          <div class="pf-panel-head">
-            <h2>Рейтинг</h2>
-            <a href="/leaderboard">Дидан →</a>
-          </div>
+        <div class="pf-panel">
+          <div class="pf-panel-head"><h2>Рейтинг</h2><a href="/leaderboard">Дидан →</a></div>
           <div class="pf-panel-body" id="pfLeaderPreview">
-            <div class="pf-empty">
-              <div class="ico">⭐</div>
-              <span>Натиҷаҳо баъд аз супориш</span>
-            </div>
+            <div class="pf-empty"><div class="ico">⭐</div><span>Натиҷаҳо баъд аз супориш</span></div>
           </div>
         </div>
       </div>
@@ -118,7 +97,7 @@
         <h2>Хабарҳо ва эълонҳо</h2>
         <a class="more" href="/courses">Ҳама →</a>
       </div>
-      <div class="pf-feat-grid" id="pfFeaturedQuizzes">
+      <div class="pf-feat-grid">
         <a class="pf-card" href="/courses">
           <h3>Хабарҳои охирин</h3>
           <p>Эълонҳо ва хабарҳои платформаи M.J.O.F</p>
