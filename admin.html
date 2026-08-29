@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Admin — Geografia</title>
+  <title>Admin — Маҷмӯаи Олимпиадаҳои Фаннӣ</title>
   <link rel="stylesheet" href="css/admin.css" />
 <style id="student-reg-style">
 .student-reg-form.grid-form{grid-template-columns:1fr 1fr;gap:.65rem .9rem}
@@ -15,7 +15,8 @@
 <body>
   <div id="loginView" class="auth-shell">
     <form id="adminLoginForm" class="auth-card">
-      <h1>Admin · Geografia</h1>
+      <h1>M.J.O.F · Admin</h1>
+      <p class="auth-sub">Маҷмӯаи Олимпиадаҳои Фаннӣ</p>
       <label>Login</label>
       <input id="adminLogin" required autocomplete="username" />
       <label>Password</label>
@@ -27,9 +28,9 @@
 
   <div id="appView" class="hidden">
     <header class="topbar">
-      <div class="brand">Geografia Admin</div>
+      <div class="brand"><span class="brand-mark">МФ</span> M.J.O.F Admin</div>
       <div class="top-actions">
-        <span id="adminName"></span>
+        <span id="adminName" class="muted"></span>
         <button type="button" id="logoutBtn" class="btn">Баромад</button>
       </div>
     </header>
@@ -40,8 +41,7 @@
       <button type="button" class="tab" data-tab="olympiads">Олимпиада / Викторина</button>
       <button type="button" class="tab" data-tab="results">Натиҷаҳо</button>
       <button type="button" class="tab" data-tab="leaderboard">Leaderboard</button>
-      <button type="button" class="tab" data-tab="gmail">Gmail</button>
-      <button type="button" class="tab" data-tab="content">Контент</button>
+      <button type="button" class="tab" data-tab="content">Контент / Хабарҳо</button>
       <button type="button" class="tab" data-tab="admins">Админҳо</button>
       <button type="button" class="tab" data-tab="audit">Audit</button>
     </nav>
@@ -81,7 +81,7 @@
             <label>12. Сурат (JPG)</label>
             <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-start">
               <div>
-                <div id="photoPreview" style="width:160px;height:160px;border:1px solid var(--border,#333);border-radius:8px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center">
+                <div id="photoPreview" style="width:160px;height:160px;border:1px solid var(--border,#cfd8e3);border-radius:8px;overflow:hidden;background:#eef2f7;display:flex;align-items:center;justify-content:center">
                   <span id="photoPlaceholder" class="muted">Сурат нест</span>
                   <img id="photoImg" alt="" style="display:none;width:100%;height:100%;object-fit:cover" />
                 </div>
@@ -110,7 +110,7 @@
             <span id="localFolderStatus" class="muted" style="font-size:.85rem"></span>
           </div>
           <p id="studentFormMsg" class="msg hidden full-row"></p>
-          <div id="newIdBox" class="full-row hidden" style="margin-top:.5rem;padding:.75rem;border:1px solid var(--border,#333);border-radius:8px">
+          <div id="newIdBox" class="full-row hidden" style="margin-top:.5rem;padding:.75rem;border:1px solid var(--border,#cfd8e3);border-radius:8px">
             <strong>ID:</strong> <code id="newIdValue"></code>
             <button type="button" id="copyIdBtn" class="btn small">Нусха</button>
           </div>
@@ -206,7 +206,7 @@
               <input type="checkbox" id="lbUseDemo" checked /> Demo ҳангоми холӣ
             </label>
             <label>Унвон
-              <input id="lbTitleInput" type="text" placeholder="Leaderboard · Top Rated" style="width:100%;margin-top:.25rem" />
+              <input id="lbTitleInput" type="text" placeholder="Рейтинг · M.J.O.F" style="width:100%;margin-top:.25rem" />
             </label>
             <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
               <button type="button" class="btn primary" id="lbSaveSettings">Сабт</button>
@@ -214,30 +214,17 @@
             </div>
             <p id="lbMsg" class="muted" style="margin-top:.5rem"></p>
           </div>
-
           <h3>Рейтинг</h3>
           <div class="table-wrap">
             <table>
-              <thead>
-                <tr>
-                  <th>Ҷой</th>
-                  <th>Ном</th>
-                  <th>Мактаб</th>
-                  <th>Синф</th>
-                  <th>Рейтинг</th>
-                  <th>Ҳал</th>
-                  <th>Мусобиқа</th>
-                  <th>Pin</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Ҷой</th><th>Ном</th><th>Мактаб</th><th>Синф</th><th>Рейтинг</th><th>Ҳал</th><th>Мусобиқа</th><th>Pin</th></tr></thead>
               <tbody id="lbGlobalBody"></tbody>
             </table>
           </div>
-
-          <h3 style="margin-top:1.25rem">Pinned ranks (ҷойҳои дастӣ)</h3>
+          <h3 style="margin-top:1.25rem">Pinned ranks</h3>
           <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center">
             <input id="pinUserId" placeholder="userId / studentId" style="min-width:160px" />
-            <input id="pinRank" type="number" min="1" placeholder="ҷой (1,2,3…)" style="width:110px" />
+            <input id="pinRank" type="number" min="1" placeholder="ҷой" style="width:110px" />
             <input id="pinName" placeholder="ном (ихтиёрӣ)" />
             <button type="button" class="btn" id="pinAdd">Илова</button>
           </div>
@@ -246,21 +233,16 @@
       </section>
 
       <section id="tab-gmail" class="tab-panel hidden">
-        <h2>Gmail корбарон</h2>
-        <div class="card grid-form" style="margin-bottom:1rem">
-          <div><label>Ҷинс</label><select id="gmGender"><option value="">Ҳама</option><option value="male">Мард</option><option value="female">Зан</option></select></div>
-          <div><label>Синф</label><input id="gmClass" /></div>
-          <div><label>Мактаб</label><input id="gmSchool" /></div>
-          <div class="form-actions"><button type="button" id="btnFilterGmail" class="btn primary">Филтр</button></div>
-        </div>
-        <div class="table-wrap"><table><thead><tr><th>Ном</th><th>Email</th><th>Ҷинс</th><th>Синф</th><th>Мактаб</th></tr></thead><tbody id="gmailBody"></tbody></table></div>
+        <h2>Gmail (ихтиёрӣ)</h2>
+        <p class="muted">Ин қисм дар M.J.O.F аз меню пинҳон аст.</p>
+        <div class="table-wrap"><table><thead><tr><th>Ном</th><th>Email</th></tr></thead><tbody id="gmailBody"></tbody></table></div>
       </section>
 
       <section id="tab-content" class="tab-panel hidden">
-        <h2>Контент / Курсы</h2>
+        <h2>Контент / Хабарҳо</h2>
         <form id="contentForm" class="card grid-form">
           <div><label>Унвон</label><input id="contentTitle" required /></div>
-          <div><label>Навъ</label><select id="contentType"><option value="book">Китоб</option><option value="article">Мақола</option><option value="link">Пайванд</option></select></div>
+          <div><label>Навъ</label><select id="contentType"><option value="article">Хабар</option><option value="link">Пайванд</option><option value="book">Мавод</option></select></div>
           <div class="full-row"><label>URL / тавсиф</label><input id="contentUrl" /></div>
           <div class="form-actions"><button type="submit" class="btn primary">Илова</button></div>
         </form>
