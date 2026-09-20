@@ -17,6 +17,21 @@ from db.repo import (
 )
 
 log = logging.getLogger("geografia.student_access")
+
+
+def _normalize_subject(v) -> str:
+    return str(v or "").strip().lower()
+
+
+def subjects_compatible(student_subject: str, olympiad_subject: str) -> bool:
+    """Empty on either side = no restriction. Both set = must match."""
+    s = _normalize_subject(student_subject)
+    o = _normalize_subject(olympiad_subject)
+    if not s or not o:
+        return True
+    return s == o
+
+
 PARTICIPANTS_FILE = DATA_DIR / "olympiad_participants.json"
 
 
@@ -169,6 +184,7 @@ def student_has_olympiad_access(olympiad_id: str, student_code: str) -> dict:
       (admin has students in «Хонандагон»; no per-olympiad assign UI yet).
     - Non-empty list = only those student codes (restriction mode).
     - Gmail synthetic ids are not enough for type=olympiad.
+    - M.J.O.F subject filter: physics student must not see math olympiad, etc.
     """
     code = (student_code or "").strip()
     if not code:
@@ -183,6 +199,7 @@ def student_has_olympiad_access(olympiad_id: str, student_code: str) -> dict:
         log.warning("participants check failed: %s", e)
         parts = []
 
+    oly = None
     oly_type = "olympiad"
     try:
         from db.repo import find_olympiad
@@ -195,7 +212,6 @@ def student_has_olympiad_access(olympiad_id: str, student_code: str) -> dict:
     if is_gmail_synth:
         if oly_type == "olympiad":
             return {"allowed": False, "reason": "student_id_required"}
-        # quiz-type: still need real student or open quiz policy
         if parts:
             return {"allowed": False, "reason": "not_assigned"}
         return {"allowed": False, "reason": "student_id_required"}
@@ -203,8 +219,19 @@ def student_has_olympiad_access(olympiad_id: str, student_code: str) -> dict:
     if not student:
         return {"allowed": False, "reason": "student_not_found"}
 
+    # M.J.O.F subject filter
+    if oly:
+        st_subj = student.get("subject") or student.get("Subject") or ""
+        oly_subj = oly.get("subject") or oly.get("Subject") or ""
+        if not subjects_compatible(st_subj, oly_subj):
+            return {
+                "allowed": False,
+                "reason": "subject_mismatch",
+                "studentSubject": st_subj,
+                "olympiadSubject": oly_subj,
+            }
+
     if not parts:
-        # No restriction list → any active Student ID can take the event
         return {"allowed": True, "reason": "open_to_all_students", "student": student}
 
     ok = any(
