@@ -6,12 +6,20 @@
     var olyTitle = st.olympiadTitle || "—";
     var olyStart = st.olympiadStart ? formatTgDate(st.olympiadStart) : "—";
     var birthFmt = st.birthDate ? formatTgDate(st.birthDate) : "—";
-    var webUrl = "https://geografia-19tf.onrender.com";
-    var igUrl = "https://www.instagram.com/geografia.tj/";
-    var webQr = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&color=0b3d2e&bgcolor=ffffff&data=" + encodeURIComponent(webUrl);
-    var igQr = "https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=10&color=000000&bgcolor=ffffff&data=" + encodeURIComponent(igUrl);
+    var subjectCode = (st.subject || "").toLowerCase().trim();
+    var subjectLabels = {
+      physics: "Физика", math: "Математика", chemistry: "Химия", biology: "Биология",
+      russian: "Русӣ", english: "Англисӣ", geography: "Ҷуғрофия", history: "Таърих",
+      informatics: "Информатика", tajik: "Тоҷикӣ", literature: "Адабиёт",
+      economy: "Иқтисод", law: "Ҳуқуқ", general: "Умумӣ", other: "Дигар"
+    };
+    var subjectLabel = subjectLabels[subjectCode] || (st.subject || "—");
+    var webUrl = "https://mjof.onrender.com";
+    var igUrl = "https://www.instagram.com/mjof.tj?utm_source=qr";
+    var webQr = "https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=4&color=1e40af&bgcolor=ffffff&data=" + encodeURIComponent(webUrl);
+    var igQr = "https://api.qrserver.com/v1/create-qr-code/?size=120x120&margin=4&color=000000&bgcolor=ffffff&data=" + encodeURIComponent(igUrl);
     var photoBlock = photo
-      ? ('<div class="photo-wrap"><img src="' + photo + '" alt="photo"/></div>')
+      ? ('<div class="photo-wrap"><img src="' + photo + '" alt=""/></div>')
       : '<div class="photo-wrap placeholder"><span>Бе сурат</span></div>';
     var rows = [
       ["ID-и иштирокчӣ", id],
@@ -24,17 +32,18 @@
       ["Муассисаи таълимӣ", st.school || ""],
       ["Синфӣ", st.className || ""],
       ["Омӯзгор", st.teacher || ""],
+      ["Фанни имтиҳонсупорӣ", subjectLabel],
       ["Намуди олимпиада", olyTitle],
       ["Санаи бақайдгирӣ", st.createdAt || st.registeredAt || new Date().toLocaleString()]
     ];
     var table = rows.map(function (r) {
       return "<tr><th>" + esc(r[0]) + "</th><td>" + esc(r[1] || "—") + "</td></tr>";
     }).join("");
-    var subLine = olyTitle !== "—" ? olyTitle : "Иштирокчӣ · Geografia.tj";
+    var subLine = olyTitle !== "—" ? olyTitle : "Иштирокчӣ · M.J.O.F";
     var chips = "";
-    if (genderLabel !== "—") chips += '<span class="chip">' + esc(genderLabel) + "</span>";
-    if (olyStart !== "—") chips += '<span class="chip">Санаи имтиҳонсупори: ' + esc(olyStart) + "</span>";
+    if (genderLabel !== "—") chips += '<span class="pill">' + esc(genderLabel) + "</span>";
+    if (olyStart !== "—") chips += '<span class="pill">Санаи имтиҳонсупорӣ: ' + esc(olyStart) + "</span>";
     var css = [
-      "@page{size:A4;margin:5mm}",
-      ":root{--g1:#0a3328;--g2:#157a58;--g3:#d4f0e4;--gold:#c9a227;--gold2:#f0d78c;--ink:#132019;--muted:#5a6b62;--line:#cfe0d6;--paper:#fffcf7}",
+      "@page{size:A4;margin:8mm}",
+      ":root{--b1:#0f172a;--b2:#1d4ed8;--b3:#1e40af;--b4:#3b82f6;--gold:#c9a227;--gold2:#f0d78c;--ink:#0f172a;--muted:#5b6b7c;--line:#cfd8e3;--paper:#fffcf7;--bg:#e8ecf1}",
       "*{box-sizing:border-box;margin:0;padding:0}",

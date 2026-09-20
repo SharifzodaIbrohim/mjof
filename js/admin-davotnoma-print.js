@@ -1,75 +1,57 @@
-/* Даъватнома print + text-fix patch — load AFTER admin-students-reg if present */
+/* Даъватнома print patch — M.J.O.F blue theme, load AFTER admin-students-reg */
 (function(){
-  var CSS = "@page{size:A4;margin:5mm}"+ 
+  var CSS = "@page{size:A4;margin:8mm}"+ 
     "@media print{html,body{height:auto!important;overflow:hidden!important;background:#fff!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}"+ 
     ".toolbar,.hint{display:none!important}.page{margin:0;padding:0;max-width:none}"+ 
     ".pass{box-shadow:none;border-radius:0;page-break-inside:avoid;break-inside:avoid}"+ 
     ".foot,.body,.head,.qr-row,.top{page-break-inside:avoid;break-inside:avoid}"+ 
-    ".photo-wrap{width:68px!important;height:68px!important}"+ 
-    ".qr img{width:72px!important;height:72px!important}"+ 
-    "table{font-size:10px!important}th,td{padding:2px 5px!important}"+ 
-    ".head{padding:5px 10px 4px!important}.head h1{font-size:1.35rem!important;margin:5px 0 2px!important}.head .tagline{display:none!important}"+ 
-    ".body{padding:5px 8px 3px!important}.foot{padding:4px 8px 5px!important}"+ 
-    ".idbox{font-size:.82rem!important;padding:3px 6px!important}"+ 
-    ".seal{margin-top:4px!important;font-size:.75rem!important}"+ 
-    ".note{margin-top:3px!important;font-size:.65rem!important}}";
+    ".photo-wrap{width:126px!important;height:152px!important}"+ 
+    ".qr img{width:96px!important;height:96px!important}"+ 
+    "table{font-size:12px!important}th,td{padding:6px 10px!important}"+ 
+    ".head{padding:12px 16px 10px!important}.head h1{font-size:1.5rem!important;margin:8px 0 4px!important}"+ 
+    ".head-logo{width:80px!important;height:80px!important}.head-logo .mark{width:60px!important;height:60px!important;font-size:1.1rem!important}"+ 
+    ".body{padding:12px 14px 8px!important}.foot{padding:10px 14px 12px!important}"+ 
+    ".idbox{font-size:1rem!important;padding:6px 12px!important}}";
 
-  var HINT = '<p class="hint" style="text-align:center;font-size:11px;color:#5a6b62;margin:4px 0 8px">'+ 
+  var HINT = '<p class="hint" style="text-align:center;font-size:11px;color:#5b6b7c;margin:4px 0 8px">'+ 
     'Чоп: дар Print → <b>Headers and footers</b>-ро ХОМӮШ кунед (то file:// / суроға наояд)</p>';
 
   function fixTexts(html){
+    html = html.replace(/GEOGRAFIA\.TJ/g, "M.J.O.F");
+    html = html.replace(/Geografia\.tj/g, "M.J.O.F");
+    html = html.replace(/geografia\.tj/gi, "mjof.tj");
+    html = html.replace(/geografia-19tf\.onrender\.com/gi, "mjof.onrender.com");
+    html = html.replace(/instagram\.com\/geografia\.tj/gi, "instagram.com/mjof.tj");
+    html = html.replace(/Платформаи география/g, "Маҷмӯаи Олимпиадаҳои Фаннӣ");
     html = html.replace(/ДАВАТНОМА · ИҶОЗАТНОМА/g, "ДАЪВАТНОМА · ИҶОЗАТНОМА");
     html = html.replace(/<h1>Даватнома<\/h1>/g, "<h1>Даъватнома</h1>");
     html = html.replace(/<title>Даватнома/g, "<title>Даъватнома");
-    html = html.replace(/<p class="tagline">[^<]*<\/p>/g, "");
-    html = html.replace(/Ҳуҷҷати расмии иштирок дар олимпиада \/ викторина/g, "");
-    html = html.replace(/Ҳуҷҷати расмии бақайдгирӣ барои олимпиада \/ викторина/g, "");
-    html = html.replace(/Ҳуҷҷати расмӣ иштирокҷи дар олимпиада/g, "");
     html = html.replace(/ID барои воридшавӣ/g, "ID-и иштирокчӣ");
     html = html.replace(/ID \(барои воридшавӣ\)/g, "ID-и иштирокчӣ");
-    html = html.replace(/ID БАРОИ ВОРИДШАВӢ/g, "ID-И ИШТИРОКЧӢ");
-    html = html.replace(/Санаи оғоз:/g, "Санаи имтиҳонсупори:");
+    html = html.replace(/Санаи оғоз:/g, "Санаи имтиҳонсупорӣ:");
     html = html.replace(/>Муассиса \/ Мактаб</g, ">Муассисаи таълимӣ<");
     html = html.replace(/>Синф</g, ">Синфӣ<");
     html = html.replace(/>Унвони олимпиада</g, ">Намуди олимпиада<");
-    html = html.replace(/<tr><th>Санаи оғози олимпиада<\/th><td>[^<]*<\/td><\/tr>/g, "");
-    html = html.replace(
-      /Ин даватнома ҳуҷҷати расмии иштирок аст\. ID-ро нигоҳ доред ва барои воридшавӣ ба платформа истифода баред\./g,
-      "Ҳуҷҷати расмии иштирокчи дар олимпиада"
-    );
-    html = html.replace(
-      /Ин даватнома ҳуҷҷати расмии иштиррок аст\./g,
-      "Ҳуҷҷати расмии иштирокчи дар олимпиада"
-    );
-    html = html.replace(
-      /Ин даватнома ҳуҷҷати расмии иштирок аст\./g,
-      "Ҳуҷҷати расмии иштирокчи дар олимпиада"
-    );
     return html;
   }
 
   function patchHtml(html){
-    if(!html || (html.indexOf("Даъватнома")<0 && html.indexOf("Даватнома")<0)) return html;
+    if(!html || (html.indexOf("Даъватнома")<0 && html.indexOf("Даватнома")<0 && html.indexOf("M.J.O.F")<0)) return html;
     html = fixTexts(html);
-    html = html.replace(/color=c13584/g,"color=000000");
-    html = html.replace(/size=160x160/g,"size=120x120");
-    if(html.indexOf("@page{size:A4;margin:5mm}")<0){
+    if(html.indexOf("@page{size:A4;margin:8mm}")<0 && html.indexOf("@media print")>=0){
       html = html.replace("</style>", CSS + "</style>");
     }
     if(html.indexOf("Headers and footers")<0){
       html = html.replace("</div><article", "</div>"+HINT+"<article");
     }
-    html = html.replace(/\.photo-wrap\{width:152px;height:152px/g,".photo-wrap{width:72px;height:72px");
-    html = html.replace(/\.photo-wrap\{width:96px;height:96px/g,".photo-wrap{width:72px;height:72px");
-    html = html.replace(/\.qr img\{width:150px;height:150px/g,".qr img{width:78px;height:78px");
-    html = html.replace(/\.qr img\{width:95px;height:95px/g,".qr img{width:78px;height:78px");
     return html;
   }
 
   var OrigBlob = window.Blob;
   window.Blob = function(parts, opts){
     try {
-      if(parts && parts.length===1 && typeof parts[0]==="string" && (parts[0].indexOf("Даъватнома")>=0 || parts[0].indexOf("Даватнома")>=0)){
+      if(parts && parts.length===1 && typeof parts[0]==="string" &&
+         (parts[0].indexOf("Даъватнома")>=0 || parts[0].indexOf("Даватнома")>=0 || parts[0].indexOf("M.J.O.F")>=0)){
         parts = [patchHtml(parts[0])];
       }
     } catch(_){}
@@ -77,5 +59,5 @@
   };
   window.Blob.prototype = OrigBlob.prototype;
 
-  console.log("[davotnoma-print] text-fix + compact 1-page + black IG installed");
+  console.log("[davotnoma-print] M.J.O.F blue theme + print fixes installed");
 })();
