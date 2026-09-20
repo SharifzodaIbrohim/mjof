@@ -1,8 +1,14 @@
-"""Student portal: /api/student/login + /api/student/olympiads.
+"""Final subject filter for student olympiad list + start.
 
-Ensures students see active olympiads/quizzes and can start them.
-M.J.O.F: subject filter — physics student does not see math olympiad;
-olympiad subject general/empty → open to all.
+Must run AFTER patch_student_portal and patch_olympiad_subject so that:
+- list_olympiads / find_olympiad already include the subject column
+- we re-bind /api/student/olympiads and do not close over the old list_olympiads
+
+Root cause of "list shows physics, start 403":
+patch_student_portal did `from db.repo import list_olympiads` at install time
+(before subject was added to SELECT), so the list handler kept the old function
+without subject → subjects_compatible treated olympiad as open → shown in UI.
+Start path imports find_olympiad at call time → had subject → subject_mismatch 403.
 """
 from __future__ import annotations
 
@@ -11,7 +17,7 @@ from datetime import datetime, timezone
 
 from flask import jsonify, request
 
-log = logging.getLogger("geografia.patch_student_portal")
+log = logging.getLogger("geografia.patch_subject_filter_final")
 
 
 def _now() -> datetime:
@@ -58,25 +64,7 @@ def _public_student(st: dict | None) -> dict | None:
 
 def install(app) -> None:
     from db import repo
-    from db.repo import find_student_by_code, list_olympiads  # noqa: F401 — kept for compat
-
-    def student_login():
-        payload = request.get_json(silent=True) or {}
-        code = str(
-            payload.get("studentId")
-            or payload.get("id")
-            or payload.get("code")
-            or ""
-        ).strip()
-        if not code:
-            return jsonify({"error": "ID-и хонанда лозим аст."}), 400
-        st = repo.find_student_by_code(code)
-        if not st:
-            return jsonify({
-                "error": "ID нодуруст аст ё хонанда ёфт нашуд.",
-                "reason": "student_not_found",
-            }), 401
-        return jsonify({"ok": True, "student": _public_student(st)})
+    from db.student_access import subjects_compatible, student_has_olympiad_access
 
     def student_olympiads():
         code = str(
@@ -89,6 +77,8 @@ def install(app) -> None:
         ).strip()
         if not code:
             return jsonify({"error": "studentId лозим аст.", "olympiads": [], "quizzes": []}), 400
+
+        # Always call through repo module so we get the subject-aware implementation
         st = repo.find_student_by_code(code)
         if not st:
             return jsonify({
@@ -96,6 +86,8 @@ def install(app) -> None:
                 "olympiads": [],
                 "quizzes": [],
             }), 401
+
+        st_subj = (st.get("subject") or st.get("Subject") or "") or ""
 
         olympiads = []
         quizzes = []
@@ -112,23 +104,30 @@ def install(app) -> None:
                 continue
             if o.get("isActive") is False:
                 continue
-            window = _window_status(o)
             seen.add(oid)
+
+            oly_subj = (o.get("subject") or o.get("Subject") or "") or ""
+            # Direct subject filter — do not rely only on access reason
+            if not subjects_compatible(st_subj, oly_subj):
+                continue
+
             access = {"allowed": False, "reason": "unknown"}
             try:
-                from db.student_access import student_has_olympiad_access
                 access = student_has_olympiad_access(oid, code)
             except Exception as e:
                 log.warning("access check %s: %s", oid, e)
+
             if access.get("reason") == "subject_mismatch":
                 continue
+
             allowed = bool(access.get("allowed"))
+            window = _window_status(o)
             card = {
                 "id": oid,
                 "title": o.get("title") or "Бе ном",
                 "description": o.get("description") or "",
                 "type": (o.get("type") or "olympiad").lower(),
-                "subject": (o.get("subject") or "") or "",
+                "subject": oly_subj,
                 "passScore": o.get("passScore") or 70,
                 "questionCount": o.get("questionCount") or len(o.get("questions") or []),
                 "isActive": o.get("isActive") is not False,
@@ -153,15 +152,12 @@ def install(app) -> None:
         })
 
     def _bind(rule: str, ep: str, fn, methods: list[str]):
-        bound = False
         for r in list(app.url_map.iter_rules()):
             if r.rule == rule:
                 app.view_functions[r.endpoint] = fn
-                bound = True
         if ep in app.view_functions:
             app.view_functions[ep] = fn
-            bound = True
-        if not bound:
+        else:
             try:
                 app.add_url_rule(rule, ep, fn, methods=methods)
             except AssertionError:
@@ -169,10 +165,11 @@ def install(app) -> None:
                     if r.rule == rule:
                         app.view_functions[r.endpoint] = fn
 
-    _bind("/api/student/login", "student_portal_login", student_login, ["POST"])
-    if "student_login" in app.view_functions:
-        app.view_functions["student_login"] = student_login
     _bind("/api/student/olympiads", "student_portal_olympiads", student_olympiads, ["GET"])
+    # Also override any other endpoint name that might serve this path
+    for r in list(app.url_map.iter_rules()):
+        if r.rule == "/api/student/olympiads":
+            app.view_functions[r.endpoint] = student_olympiads
 
-    log.info("student portal routes installed")
-    print("[boot] patch_student_portal: login + olympiads list + subject filter")
+    print("[boot] patch_subject_filter_final: student list re-bound + subject filter")
+    log.info("patch_subject_filter_final installed")

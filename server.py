@@ -137,6 +137,7 @@ _boot_patch("patch_persist_answers", "patch_persist_answers", "db.patch_persist_
 _boot_patch("patch_review_text_fix", "patch_review_text_fix", "db.patch_review_text_fix")
 _boot_patch("patch_admin_export", "patch_admin_export", "db.patch_admin_export")
 _boot_patch("patch_olympiad_subject", "patch_olympiad_subject", "db.patch_olympiad_subject")
+_boot_patch("patch_subject_filter_final", "patch_subject_filter_final", "db.patch_subject_filter_final")
 
 
 def _install_safety_net() -> None:
