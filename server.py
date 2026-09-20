@@ -64,8 +64,8 @@ print(f"[boot] mode={_boot_mode}")
 _EXTRA_PUBLIC = {
     "index.html", "admin.html", "student.html",
     "courses.html", "leaderboard.html", "css.css",
-    "css/admin.css", "css/student.css", "css/platform.css",
-    "js.js", "js/i18n.js", "js/platform-home.js", "js/platform.js",
+    "css/admin.css", "css/student.css", "css/platform.css", "css/news.css",
+    "js.js", "js/i18n.js", "js/platform-home.js", "js/platform.js", "js/news.js",
     "js/admin.js", "js/admin-session.js", "js/admin-fixes.js", "js/admin-gmail.js",
     "js/admin-content.js", "js/admin-leaderboard.js", "js/admin-olympiad.js",
     "js/admin-students-reg.js", "js/admin-davotnoma-print.js", "js/admin-rbac-ui.js", "js/admin-audit.js", "js/student.js",
