@@ -2,11 +2,11 @@
     try {
       var data = await api("/api/admin/students");
       var list = data.students || [];
-      var headers = ["ID","Насаб","Ном","Номи падар","Ҷинс","Таваллуд","Суроға","Мактаб","Синф","Омӯзгор","Олимпиада","Санаи оғоз","Сурат"];
+      var headers = ["ID","Насаб","Ном","Номи падар","Ҷинс","Таваллуд","Суроға","Мактаб","Синф","Фанн","Омӯзгор","Олимпиада","Санаи оғоз","Сурат"];
       var lines = [headers.join(",")];
       list.forEach(function (s) {
         var g = s.gender === "male" ? "Мард" : (s.gender === "female" ? "Зан" : (s.gender || ""));
-        lines.push([s.id,s.lastName,s.firstName,s.patronymic,g,s.birthDate,s.address,s.school,s.className,s.teacher,s.olympiadTitle,s.olympiadStart,(s.hasPhoto||s.photoData)?"ҳа":"не"].map(csvEscape).join(","));
+        lines.push([s.id,s.lastName,s.firstName,s.patronymic,g,s.birthDate,s.address,s.school,s.className,s.subject||"",s.teacher,s.olympiadTitle,s.olympiadStart,(s.hasPhoto||s.photoData)?"ҳа":"не"].map(csvEscape).join(","));
       });
       var blob = new Blob(["\uFEFF" + lines.join("\r\n")], { type: "text/csv;charset=utf-8" });
       var url = URL.createObjectURL(blob);
@@ -28,10 +28,12 @@
     var teacher = val("stTeacher"), gender = val("stGender");
     var olympiadTitle = val("stOlympiadTitle"), olympiadStart = val("stOlympiadStart");
     var photoData = val("stPhotoData");
+    var subject = val("stSubject");
     var fullName = [lastName, firstName, patronymic].filter(Boolean).join(" ");
     try {
       if (!lastName || !firstName) throw new Error("Насаб ва Ном ҳатмӣ.");
       if (!className || !school) throw new Error("Синф ва Мактаб ҳатмӣ.");
+      if (!subject) throw new Error("Фаннро интихоб кунед.");
       if (!getToken()) throw new Error("Аввал ворид шавед (token нест). Саҳифаро нав кунед ва дубора login кунед.");
       var data = await api("/api/admin/students", {
         method: "POST",
@@ -40,7 +42,7 @@
           birthDate: birthDate, address: address, className: className,
           school: school, teacher: teacher, gender: gender,
           olympiadTitle: olympiadTitle, olympiadStart: olympiadStart,
-          photoData: photoData, fullName: fullName
+          photoData: photoData, fullName: fullName, subject: subject
         })
       });
       var s = data.student || data;
@@ -48,7 +50,7 @@
         lastName: lastName, firstName: firstName, patronymic: patronymic,
         birthDate: birthDate, address: address, school: school, className: className,
         teacher: teacher, gender: gender, olympiadTitle: olympiadTitle,
-        olympiadStart: olympiadStart, photoData: photoData,
+        olympiadStart: olympiadStart, photoData: photoData, subject: subject,
         fullName: s.fullName || fullName,
         createdAt: s.createdAt || new Date().toLocaleString()
       });
