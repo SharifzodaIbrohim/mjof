@@ -59,6 +59,7 @@
 
       <section id="tab-students" class="tab-panel hidden">
         <h2>Хонандагон — Бақайдгирӣ</h2>
+        <p class="muted">Форма барои бақайдгирӣ — ба таври оддӣ ID ва даъватнома созед.</p>
         <form id="studentForm" class="card grid-form student-reg-form" action="javascript:void(0)" method="post" onsubmit="return false;">
           <div><label>1. Насаб *</label><input id="stLastName" required placeholder="Ҳасанов" /></div>
           <div><label>2. Ном *</label><input id="stFirstName" required placeholder="Али" /></div>
@@ -228,98 +229,83 @@
       <section id="tab-leaderboard" class="tab-panel hidden">
         <h2>Leaderboard (public)</h2>
         <div id="leaderboardAdminRoot">
-          <div class="card" style="margin-bottom:1rem">
-            <label style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
-              <input type="checkbox" id="lbPublicToggle" checked /> Оммавӣ (public)
-            </label>
-            <label style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
-              <input type="checkbox" id="lbShowSchool" checked /> Нишон додани мактаб
-            </label>
-            <label style="display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem">
-              <input type="checkbox" id="lbShowClass" checked /> Нишон додани синф
-            </label>
-            <label style="display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem">
-              <input type="checkbox" id="lbUseDemo" checked /> Demo ҳангоми холӣ
-            </label>
-            <label>Унвон
-              <input id="lbTitleInput" type="text" placeholder="Рейтинг · M.J.O.F" style="width:100%;margin-top:.25rem" />
-            </label>
-            <div style="margin-top:1rem;display:flex;gap:.5rem;flex-wrap:wrap">
-              <button type="button" class="btn primary" id="lbSaveSettings">Сабт</button>
-              <button type="button" class="btn" id="lbRefresh">Навсозӣ</button>
-            </div>
-            <p id="lbMsg" class="muted" style="margin-top:.5rem"></p>
-          </div>
-          <h3>Рейтинг</h3>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>Ҷой</th><th>Ном</th><th>Мактаб</th><th>Синф</th><th>Рейтинг</th><th>Ҳал</th><th>Мусобиқа</th><th>Pin</th></tr></thead>
-              <tbody id="lbGlobalBody"></tbody>
-            </table>
-          </div>
-          <h3 style="margin-top:1.25rem">Pinned ranks</h3>
-          <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.75rem;align-items:center">
-            <input id="pinUserId" placeholder="userId / studentId" style="min-width:160px" />
-            <input id="pinRank" type="number" min="1" placeholder="ҷой" style="width:110px" />
-            <input id="pinName" placeholder="ном (ихтиёрӣ)" />
-            <button type="button" class="btn primary" id="lbAddPin">Pin</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead><tr><th>User</th><th>Ҷой</th><th>Ном</th><th></th></tr></thead>
-              <tbody id="lbPinsBody"></tbody>
-            </table>
-          </div>
+          <p class="muted">Танзимоти рейтинг</p>
         </div>
       </section>
 
       <section id="tab-content" class="tab-panel hidden">
         <h2>Контент / Хабарҳо</h2>
+        <p class="muted" style="margin-top:-.4rem;margin-bottom:1rem">Хабар, мақола, маҷалла ё эълон нашр кунед — акс, унвон ва матн.</p>
         <form id="contentForm" class="card grid-form">
-          <div><label>Унвон</label><input id="contentTitle" required /></div>
-          <div><label>Навъ</label><select id="contentType"><option value="article">Хабар</option><option value="link">Пайванд</option><option value="book">Мавод</option></select></div>
-          <div class="full-row"><label>Матн / URL</label><textarea id="contentBody" rows="4"></textarea></div>
-          <div class="form-actions"><button type="submit" class="btn primary">Илова</button></div>
+          <input type="hidden" id="contentEditId" value="" />
+          <div><label>Унвон *</label><input id="contentTitle" required maxlength="200" placeholder="Сарлавҳаи хабар" /></div>
+          <div><label>Навъ</label>
+            <select id="contentType">
+              <option value="news">Хабар</option>
+              <option value="article">Мақола</option>
+              <option value="magazine">Маҷалла</option>
+              <option value="announcement">Эълон</option>
+              <option value="link">Пайванд</option>
+            </select>
+          </div>
+          <div class="full-row"><label>Хулоса (кӯтоҳ)</label><input id="contentSummary" maxlength="500" placeholder="1–2 ҷумла барои корт" /></div>
+          <div class="full-row"><label>Матни пурра</label><textarea id="contentBody" rows="6" placeholder="Матни хабар / мақола..."></textarea></div>
+          <div><label>Акс (файл)</label><input type="file" id="contentImageFile" accept="image/jpeg,image/png,image/webp,image/gif" /></div>
+          <div><label>ё URL-и акс</label><input id="contentImageUrl" type="url" placeholder="https://..." /></div>
+          <div class="full-row" id="contentImagePreviewWrap" style="display:none">
+            <label>Пешнамоиш</label>
+            <div id="contentImagePreview" style="max-width:280px;max-height:160px;border-radius:10px;overflow:hidden;border:1px solid var(--border,#cfd8e3);background:#eef2f7">
+              <img id="contentImagePreviewImg" alt="" style="width:100%;height:160px;object-fit:cover;display:block" />
+            </div>
+          </div>
+          <div><label>Муаллиф</label><input id="contentAuthor" value="M.J.O.F" maxlength="80" /></div>
+          <div><label>Пайванд (ихтиёрӣ)</label><input id="contentUrl" type="url" placeholder="https://..." /></div>
+          <div style="display:flex;align-items:center;gap:1.25rem;padding-top:1.4rem">
+            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-weight:600"><input type="checkbox" id="contentFeatured" /> Вижа</label>
+            <label style="display:flex;align-items:center;gap:.4rem;cursor:pointer;font-weight:600"><input type="checkbox" id="contentPublished" checked /> Нашршуда</label>
+          </div>
+          <div class="form-actions full-row">
+            <button type="submit" class="btn primary" id="contentSubmitBtn">Илова кардан</button>
+            <button type="button" class="btn" id="contentResetBtn" style="display:none">Бекор</button>
+          </div>
         </form>
-        <div class="table-wrap" style="margin-top:1rem"><table><thead><tr><th>Унвон</th><th>Навъ</th><th></th></tr></thead><tbody id="contentBodyTable"></tbody></table></div>
+        <div class="table-wrap" style="margin-top:1.25rem">
+          <table>
+            <thead><tr><th>Акс</th><th>Унвон</th><th>Навъ</th><th>Ҳолат</th><th></th></tr></thead>
+            <tbody id="contentBodyTable"></tbody>
+          </table>
+        </div>
       </section>
 
       <section id="tab-admins" class="tab-panel hidden">
         <h2>Админҳо</h2>
         <form id="adminForm" class="card grid-form">
           <div><label>Login</label><input id="newAdminLogin" required /></div>
-          <div><label>Ном</label><input id="newAdminName" /></div>
           <div><label>Password</label><input id="newAdminPassword" type="password" required /></div>
-          <div><label>Role</label>
-            <select id="newAdminRole">
-              <option value="super_admin">super_admin</option>
-              <option value="olympiad_admin">olympiad_admin — Олимпиада</option>
-              <option value="user_admin">user_admin — Хонандагон</option>
-            </select>
-          </div>
           <div class="form-actions"><button type="submit" class="btn primary">Илова</button></div>
         </form>
-        <div class="table-wrap" style="margin-top:1rem"><table><thead><tr><th>Login</th><th>Ном</th><th>Role</th><th></th></tr></thead><tbody id="adminsBody"></tbody></table></div>
+        <div class="table-wrap" style="margin-top:1rem"><table><thead><tr><th>Login</th><th></th></tr></thead><tbody id="adminsBody"></tbody></table></div>
       </section>
 
       <section id="tab-audit" class="tab-panel hidden">
-        <h2>Audit log</h2>
-        <div class="table-wrap"><table><thead><tr><th>Вақт</th><th>Админ</th><th>Амал</th><th>Тафсилот</th></tr></thead><tbody id="auditBody"></tbody></table></div>
+        <h2>Audit</h2>
+        <div class="table-wrap"><table><thead><tr><th>Вақт</th><th>Амал</th><th>Админ</th></tr></thead><tbody id="auditBody"></tbody></table></div>
       </section>
     </main>
   </div>
 
-  <script src="js/admin.js"></script>
   <script src="js/admin-session.js"></script>
+  <script src="js/admin.js"></script>
+  <script src="js/admin-fixes.js"></script>
   <script src="js/admin-students-reg.js"></script>
   <script src="js/admin-davotnoma-print.js"></script>
   <script src="js/admin-olympiad.js"></script>
-  <script src="js/admin-results-review.js"></script>
-  <script src="js/admin-leaderboard.js"></script>
   <script src="js/admin-content.js"></script>
-  <script src="js/admin-audit.js"></script>
+  <script src="js/admin-leaderboard.js"></script>
   <script src="js/admin-export.js"></script>
   <script src="js/admin-rbac-ui.js"></script>
-  <script src="js/admin-fixes.js"></script>
+  <script src="js/admin-audit.js"></script>
+  <script src="js/admin-results-review.js"></script>
+  <script src="js/admin-results-click-fix.js"></script>
 </body>
 </html>
