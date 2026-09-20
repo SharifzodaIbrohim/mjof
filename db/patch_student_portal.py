@@ -1,7 +1,8 @@
 """Student portal: /api/student/login + /api/student/olympiads.
 
 Ensures students see active olympiads/quizzes and can start them.
-Empty participant list → LOCKED (admin must assign students).
+M.J.O.F: subject filter — physics student does not see math olympiad;
+olympiad subject general/empty → open to all.
 """
 from __future__ import annotations
 
@@ -51,6 +52,7 @@ def _public_student(st: dict | None) -> dict | None:
         "fullName": st.get("fullName") or st.get("full_name"),
         "className": st.get("className") or st.get("class_name"),
         "school": st.get("school") or st.get("school_name") or "",
+        "subject": (st.get("subject") or st.get("Subject") or "") or "",
     }
 
 
@@ -117,12 +119,15 @@ def install(app) -> None:
                 access = student_has_olympiad_access(oid, code)
             except Exception as e:
                 log.warning("access check %s: %s", oid, e)
+            if access.get("reason") == "subject_mismatch":
+                continue
             allowed = bool(access.get("allowed"))
             card = {
                 "id": oid,
                 "title": o.get("title") or "Бе ном",
                 "description": o.get("description") or "",
                 "type": (o.get("type") or "olympiad").lower(),
+                "subject": (o.get("subject") or "") or "",
                 "passScore": o.get("passScore") or 70,
                 "questionCount": o.get("questionCount") or len(o.get("questions") or []),
                 "isActive": o.get("isActive") is not False,
@@ -168,7 +173,5 @@ def install(app) -> None:
         app.view_functions["student_login"] = student_login
     _bind("/api/student/olympiads", "student_portal_olympiads", student_olympiads, ["GET"])
 
-    # Empty list locked via db.student_access (no open override).
-
     log.info("student portal routes installed")
-    print("[boot] patch_student_portal: login + olympiads list")
+    print("[boot] patch_student_portal: login + olympiads list + subject filter")
