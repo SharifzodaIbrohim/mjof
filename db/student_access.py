@@ -24,10 +24,12 @@ def _normalize_subject(v) -> str:
 
 
 def subjects_compatible(student_subject: str, olympiad_subject: str) -> bool:
-    """Empty on either side = no restriction. Both set = must match."""
+    """Olympiad empty/general/умумӣ → open to all. Both specific → must match."""
     s = _normalize_subject(student_subject)
     o = _normalize_subject(olympiad_subject)
-    if not s or not o:
+    if not o or o in ("general", "умумӣ", "all", "other"):
+        return True
+    if not s:
         return True
     return s == o
 
@@ -180,11 +182,10 @@ def student_has_olympiad_access(olympiad_id: str, student_code: str) -> dict:
     """
     Access rules (school-friendly):
     - Valid Student ID required.
-    - Empty olympiad_participants list = ALL active students may start
-      (admin has students in «Хонандагон»; no per-olympiad assign UI yet).
-    - Non-empty list = only those student codes (restriction mode).
-    - Gmail synthetic ids are not enough for type=olympiad.
-    - M.J.O.F subject filter: physics student must not see math olympiad, etc.
+    - Empty olympiad_participants list = ALL active students may start.
+    - Non-empty list = only those student codes.
+    - M.J.O.F subject filter: physics student must not take math olympiad.
+      Olympiad subject general/empty → all students allowed.
     """
     code = (student_code or "").strip()
     if not code:
