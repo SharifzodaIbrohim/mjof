@@ -1,4 +1,4 @@
-// Student portal — olympiad UI (aligned with student.html IDs)
+// Student portal — olympiad UI (M.J.O.F + subject filter)
 (function () {
   'use strict';
 
@@ -41,11 +41,33 @@
   let timerId = null;
   let autosaveId = null;
 
+  var SUBJECT_LABELS = {
+    physics: 'Физика', math: 'Математика', chemistry: 'Химия',
+    biology: 'Биология', russian: 'Русӣ', english: 'Англисӣ',
+    geography: 'Ҷуғрофия', history: 'Таърих', informatics: 'Информатика',
+    tajik: 'Тоҷикӣ', literature: 'Адабиёт', economy: 'Иқтисод', law: 'Ҳуқуқ',
+    general: 'Умумӣ', other: 'Дигар'
+  };
+  function subjectLabel(code) {
+    var c = String(code || '').toLowerCase().trim();
+    return SUBJECT_LABELS[c] || (c ? c : '');
+  }
+  /** Empty / general / умумӣ olympiad → visible to every student. */
+  function filterBySubject(list, studentSubject) {
+    var s = String(studentSubject || '').toLowerCase().trim();
+    return (list || []).filter(function (o) {
+      var os = String(o.subject || '').toLowerCase().trim();
+      if (!os || os === 'general' || os === 'умумӣ' || os === 'all' || os === 'other') return true;
+      if (!s) return true;
+      return os === s;
+    });
+  }
+
   function $(id) { return document.getElementById(id); }
   function esc(s) {
     return String(s == null ? '' : s)
-      .replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>')
-      .replace(/"/g, '"');
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
   function show(el, on) {
     if (!el) return;
@@ -92,6 +114,12 @@
     });
     student = data.student || data;
     saveLocalStudent(student);
+    var badge = document.getElementById('studentSubjectBadge');
+    if (badge) {
+      var sl = subjectLabel(student.subject);
+      if (sl) { badge.textContent = sl; badge.classList.remove('hidden'); }
+      else { badge.classList.add('hidden'); }
+    }
     return student;
   }
 
@@ -145,10 +173,12 @@
       const dur = o.durationMin != null ? o.durationMin : o.duration;
       const durTxt = (dur === 0 || dur === '0') ? t('noLimit') : (dur ? (dur + ' ' + t('minutes')) : '');
       const done = o.alreadySubmitted || o.finished;
+      const subj = subjectLabel(o.subject);
+      const subjHtml = subj ? (' <span class="badge subject">' + esc(subj) + '</span>') : '';
       const btn = done
         ? '<button class="btn" disabled>' + t('statusParticipated') + '</button>'
         : '<button class="btn primary" data-start="' + esc(id) + '">' + t('startExam') + '</button>';
-      return '<div class="card"><h3>' + title + '</h3><p class="muted">' + t('questionsCount') + ': ' + nq +
+      return '<div class="card"><h3>' + title + subjHtml + '</h3><p class="muted">' + t('questionsCount') + ': ' + nq +
         (durTxt ? (' · ' + durTxt) : '') + '</p>' + btn + '</div>';
     }).join('');
     box.querySelectorAll('[data-start]').forEach(function (btn) {
@@ -161,8 +191,11 @@
   async function loadList() {
     const sid = student && (student.id || student.studentId || student.code);
     const data = await api('/api/student/olympiads?studentId=' + encodeURIComponent(sid));
-    const oly = data.olympiads || data.items || [];
+    let oly = data.olympiads || data.items || [];
     let quizzes = data.quizzes || [];
+    const stSubj = (student && (student.subject || student.Subject)) || '';
+    oly = filterBySubject(oly, stSubj);
+    quizzes = filterBySubject(quizzes, stSubj);
     if (!quizzes.length) {
       quizzes = oly.filter(function (o) {
         const t = String(o.type || '').toLowerCase();
@@ -489,6 +522,12 @@
         show($('appView'), true);
         if ($('studentName')) $('studentName').textContent = student.fullName || student.name || student.id;
         if ($('studentMeta')) $('studentMeta').textContent = [student.className, student.school].filter(Boolean).join(' · ');
+        var badge = document.getElementById('studentSubjectBadge');
+        if (badge) {
+          var sl = subjectLabel(student.subject);
+          if (sl) { badge.textContent = sl; badge.classList.remove('hidden'); }
+          else { badge.classList.add('hidden'); }
+        }
         await loadList();
       } catch (e) {
         logout();
