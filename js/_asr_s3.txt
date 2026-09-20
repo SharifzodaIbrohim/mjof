@@ -7,8 +7,8 @@
       ".pass::before{content:'';position:absolute;inset:7px;border:1px solid var(--gold);border-radius:7px;pointer-events:none;z-index:2}",
       ".head{background:linear-gradient(135deg,var(--b1),#1e3a8a 45%,var(--b2));color:#fff;padding:16px 20px 14px;text-align:center;position:relative;z-index:1}",
       ".head-row{display:flex;align-items:center;justify-content:space-between;gap:14px}",
-      ".head-logo{width:96px;height:96px;object-fit:contain;flex-shrink:0;background:rgba(255,255,255,.16);border-radius:12px;padding:4px;display:grid;place-items:center}",
-      ".head-logo .mark{width:72px;height:72px;border-radius:14px;background:linear-gradient(135deg,#1e40af,#3b82f6);color:#fff;display:grid;place-items:center;font-size:1.35rem;font-weight:800;letter-spacing:.02em}",
+      ".head-logo{width:96px;height:96px;object-fit:contain;flex-shrink:0;background:rgba(255,255,255,.16);border-radius:12px;padding:4px;display:flex;align-items:center;justify-content:center}",
+      ".head-logo img{width:100%;height:100%;object-fit:contain;border-radius:8px;display:block;background:#fff}",
       ".head-center{flex:1;min-width:0;text-align:center}",
       ".brand{font-size:.95rem;letter-spacing:.3em;font-weight:800}",
       ".badge{display:inline-block;margin-top:8px;background:linear-gradient(90deg,var(--gold),var(--gold2),var(--gold));color:var(--b1);padding:5px 16px;border-radius:999px;font-weight:800;letter-spacing:.08em;font-size:.72rem}",
@@ -45,7 +45,8 @@
       ".foot,.body,.head{page-break-inside:avoid;break-inside:avoid}",
       ".qr img{width:96px;height:96px}.photo-wrap{width:126px;height:152px}}"
     ].join("");
-    var logoBlock = '<div class="head-logo"><div class="mark">МФ</div></div>';
+    var logoBlockL = '<div class="head-logo"><img src="https://mjof.onrender.com/data/%D0%90%D0%B7_%D1%82%D0%B0%D1%80%D0%B0%D1%84%D0%B8_%D1%87%D0%B0%D0%BF.jpg" alt="" onerror="this.onerror=null;this.src=\'https://mjof.onrender.com/logo-chap.jpg\'"/></div>';
+    var logoBlockR = '<div class="head-logo"><img src="https://mjof.onrender.com/data/%D0%90%D0%B7_%D1%82%D0%B0%D1%80%D0%B0%D1%84%D0%B8_%D1%80%D0%BE%D1%81%D1%82.jpg" alt="" onerror="this.onerror=null;this.src=\'https://mjof.onrender.com/logo-rost.jpg\'"/></div>';
     return [
       '<!DOCTYPE html><html lang="tg"><head><meta charset="utf-8"/>',
       '<meta name="viewport" content="width=device-width,initial-scale=1"/>',
@@ -53,12 +54,12 @@
       '<div class="page"><div class="toolbar"><button type="button" onclick="window.print()">🖨 Чоп / Save as PDF</button></div>',
       '<p class="hint">Чоп: Headers and footers-ро хомӯш кунед · Margins: Default</p>',
       '<article class="pass"><header class="head"><div class="head-row">',
-      logoBlock,
+      logoBlockL,
       '<div class="head-center"><div class="brand">M.J.O.F</div>',
       '<div class="badge">ДАЪВАТНОМА · ИҶОЗАТНОМА</div>',
       '<h1>Даъватнома</h1>',
       '<p class="tagline">МАҶМӮАИ ОЛИМПИАДАҲОИ ФАННӢ</p></div>',
-      logoBlock,
+      logoBlockR,
       '</div></header>',
       '<div class="gold-line"></div><div class="body"><div class="top">', photoBlock,
       '<div class="meta"><div class="id-label">ID-и иштирокчӣ</div>',
