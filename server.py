@@ -61,7 +61,6 @@ if app is None:
 
 print(f"[boot] mode={_boot_mode}")
 
-# M.J.O.F public pages — бе countries / quiz / profile
 _EXTRA_PUBLIC = {
     "index.html", "admin.html", "student.html",
     "courses.html", "leaderboard.html", "css.css",
@@ -82,7 +81,6 @@ try:
     g = globals()
     if "PUBLIC_PATHS" in g and isinstance(g["PUBLIC_PATHS"], set):
         g["PUBLIC_PATHS"].update(_EXTRA_PUBLIC)
-        # remove legacy Geografia pages if present
         for legacy in ("countries.html", "quiz.html", "profile.html", "css/quiz.css", "css/profile.css",
                        "js/quiz-platform.js", "js/profile.js"):
             g["PUBLIC_PATHS"].discard(legacy)
@@ -138,6 +136,7 @@ _boot_patch("patch_attempt_review", "patch_attempt_review", "db.patch_attempt_re
 _boot_patch("patch_persist_answers", "patch_persist_answers", "db.patch_persist_answers")
 _boot_patch("patch_review_text_fix", "patch_review_text_fix", "db.patch_review_text_fix")
 _boot_patch("patch_admin_export", "patch_admin_export", "db.patch_admin_export")
+_boot_patch("patch_olympiad_subject", "patch_olympiad_subject", "db.patch_olympiad_subject")
 
 
 def _install_safety_net() -> None:
@@ -156,7 +155,6 @@ def _install_safety_net() -> None:
         app.view_functions["student_login"] = student_login_safe
         print("[boot] safety-net: student_login id|studentId|code")
 
-    # Redirect legacy Geografia paths → home
     @app.route("/countries")
     @app.route("/countries.html")
     @app.route("/quiz")
