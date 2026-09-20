@@ -1,10 +1,24 @@
 (function(){
-  var F=["/js/_asr_s0.txt","/js/_asr_s1.txt","/js/_asr_s2.txt","/js/_asr_s3.txt","/js/_asr_s4.txt","/js/_asr_s5.txt","/js/_asr_s6.txt","/js/_asr_s7.txt"];
+  var V = "mjof-dav-2";
+  var F = [
+    "/js/_asr_s0.txt?v=" + V,
+    "/js/_asr_s1.txt?v=" + V,
+    "/js/_asr_s2.txt?v=" + V,
+    "/js/_asr_s3.txt?v=" + V,
+    "/js/_asr_s4.txt?v=" + V,
+    "/js/_asr_s5.txt?v=" + V,
+    "/js/_asr_s6.txt?v=" + V,
+    "/js/_asr_s7.txt?v=" + V
+  ];
   Promise.all(F.map(function(f){
-    return fetch(f,{credentials:"same-origin"}).then(function(r){
-      if(!r.ok) throw new Error(f+" "+r.status);
+    return fetch(f, { credentials: "same-origin", cache: "no-store" }).then(function(r){
+      if (!r.ok) throw new Error(f + " " + r.status);
       return r.text();
     });
-  })).then(function(p){ (0,eval)(p.join("")); })
-  .catch(function(e){ console.error("[students-reg] load failed", e); });
+  })).then(function(p){
+    (0, eval)(p.join(""));
+    console.log("[students-reg] M.J.O.F davotnoma loaded v=" + V);
+  }).catch(function(e){
+    console.error("[students-reg] load failed", e);
+  });
 })();
