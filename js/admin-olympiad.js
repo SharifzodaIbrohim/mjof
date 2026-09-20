@@ -439,9 +439,12 @@
         }
       }
       var showRes = !!(document.getElementById("olyShowResults") || {}).checked;
+      var subjEl = document.getElementById("olySubject");
+      var subject = subjEl ? String(subjEl.value || "general").trim() : "general";
       var payload = {
         title: title,
         type: (document.getElementById("olyType") || {}).value || "olympiad",
+        subject: subject,
         passScore: Number((document.getElementById("olyPass") || {}).value) || 70,
         startTime: (document.getElementById("olyStart") || {}).value || null,
         endTime: (document.getElementById("olyEnd") || {}).value || null,
@@ -515,33 +518,25 @@
         onSubmit(ev);
       };
     }
-    [
-      ["addQSingle", "single"],
-      ["addQShort", "short"],
-      ["addQMatch", "matching"],
-      ["addQText", "text"],
-    ].forEach(function (pair) {
-      var el = document.getElementById(pair[0]);
-      if (el)
-        el.onclick = function (ev) {
-          ev.preventDefault();
-          addQuestion(pair[1]);
-        };
-    });
-    var legacy = document.getElementById("addQuestionBtn");
-    if (legacy)
-      legacy.onclick = function (ev) {
-        ev.preventDefault();
-        addQuestion("single");
+    ["addQSingle", "addQShort", "addQMatch", "addQText", "addQuestionBtn"].forEach(function (id) {
+      var btn = document.getElementById(id);
+      if (!btn) return;
+      var typeMap = { addQSingle: "single", addQShort: "short", addQMatch: "matching", addQText: "text", addQuestionBtn: "single" };
+      btn.onclick = function () {
+        addQuestion(typeMap[id] || "single");
       };
+    });
   }
 
-  window.__geoAddOlympiadQuestion = addQuestion;
-  window.__geoSaveOlympiad = onSubmit;
-  wire();
-  document.querySelectorAll(".tab").forEach(function (b) {
-    b.addEventListener("click", function () {
-      if (b.getAttribute("data-tab") === "olympiads") setTimeout(wire, 30);
-    });
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", wire);
+  } else {
+    wire();
+  }
+  document.addEventListener("click", function (ev) {
+    var t = ev.target;
+    if (t && t.classList && t.classList.contains("tab")) {
+      if (t.getAttribute("data-tab") === "olympiads") setTimeout(wire, 30);
+    }
   });
 })();
