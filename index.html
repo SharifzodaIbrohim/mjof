@@ -97,7 +97,7 @@
         <h2>Хабарҳо ва эълонҳо</h2>
         <a class="more" href="/courses">Ҳама →</a>
       </div>
-      <div class="pf-feat-grid">
+      <div class="pf-feat-grid" id="homeNewsGrid">
         <a class="pf-card" href="/courses">
           <h3>Хабарҳои охирин</h3>
           <p>Эълонҳо ва хабарҳои платформаи M.J.O.F</p>
@@ -120,5 +120,23 @@
   <script src="js/i18n.js"></script>
   <script src="js/platform.js"></script>
   <script src="js/platform-home.js"></script>
+  <script>
+  (function(){
+    var grid = document.getElementById('homeNewsGrid');
+    if (!grid) return;
+    function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+    var TYPE={news:'Хабар',article:'Мақола',magazine:'Маҷалла',announcement:'Эълон',link:'Пайванд'};
+    fetch('/api/content',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+      var items=(d.items||[]).slice(0,3);
+      if(!items.length) return;
+      grid.innerHTML=items.map(function(it){
+        return '<a class="pf-card" href="/courses">'
+          +'<h3>'+esc(it.title)+'</h3>'
+          +'<p>'+esc(it.summary||it.body||'').slice(0,120)+'</p>'
+          +'<span class="pf-tag">'+esc(TYPE[it.type]||'Хабар')+'</span></a>';
+      }).join('');
+    }).catch(function(){});
+  })();
+  </script>
 </body>
 </html>
