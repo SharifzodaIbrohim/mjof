@@ -1,5 +1,5 @@
 (function(){
-  var V = "mjof-dav-2";
+  var V = "mjof-dav-3";
   var F = [
     "/js/_asr_s0.txt?v=" + V,
     "/js/_asr_s1.txt?v=" + V,
