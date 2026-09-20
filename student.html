@@ -1,1 +1,106 @@
-PLACEHOLDER_HTML
+<!DOCTYPE html>
+<html lang="tg">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Олимпиадаҳо — Маҷмӯаи Олимпиадаҳои Фаннӣ</title>
+  <link rel="stylesheet" href="css/student.css" />
+</head>
+<body>
+  <div id="loginView" class="auth-shell">
+    <button type="button" class="icon-btn auth-theme-btn" id="themeBtnLogin" title="Тема">🌙</button>
+    <form id="studentLoginForm" class="auth-card">
+      <div class="brand-row">
+        <span class="brand-mark">МФ</span>
+        <div>
+          <strong>M.J.O.F</strong>
+          <span class="muted">Маҷмӯаи Олимпиадаҳои Фаннӣ</span>
+        </div>
+      </div>
+      <h1>Воридшавии хонанда</h1>
+      <p class="muted">Танҳо бо ID-е, ки админ додааст</p>
+      <label>ID-и шумо</label>
+      <input id="studentIdInput" type="text" inputmode="numeric" placeholder="Рақами донишҷӯ" required />
+      <button type="submit" class="btn primary">Ворид шудан</button>
+      <p id="loginError" class="error hidden"></p>
+      <p class="muted center"><a href="/">Бозгашт ба сайт</a></p>
+    </form>
+  </div>
+
+  <div id="appView" class="hidden">
+    <header class="topbar">
+      <div class="topbar-left">
+        <span class="brand-mark sm">МФ</span>
+        <div>
+          <strong id="studentName">—</strong>
+          <span id="studentMeta" class="muted"></span>
+          <span id="studentSubjectBadge" class="badge subject hidden"></span>
+        </div>
+      </div>
+      <div class="topbar-actions">
+        <button type="button" class="icon-btn" id="themeBtn" title="Тема">🌙</button>
+        <select id="pfLang" class="pf-lang" title="Забон" aria-label="Language">
+          <option value="tg">TJ</option>
+          <option value="ru">RU</option>
+          <option value="en">EN</option>
+        </select>
+        <a href="/" class="btn ghost">Сайт</a>
+        <button id="logoutBtn" type="button" class="btn">Баромадан</button>
+      </div>
+    </header>
+
+    <main class="panel">
+      <section id="listView">
+        <div class="section-head">
+          <h2>Олимпиадаҳои фаъол</h2>
+          <p class="muted" id="subjectFilterHint">Танҳо олимпиадаҳои фанни шумо нишон дода мешаванд.</p>
+        </div>
+        <div id="olympiadList" class="cards"></div>
+        <p id="emptyOly" class="muted empty-box hidden">Ҳоло олимпиадаи фаъол нест (ё барои фанни шумо нест).</p>
+
+        <div class="section-head" style="margin-top:1.75rem">
+          <h2>Викторинаҳо</h2>
+        </div>
+        <div id="quizList" class="cards"></div>
+        <p id="emptyQuiz" class="muted empty-box hidden">Ҳоло викторина нест.</p>
+      </section>
+
+      <section id="examView" class="hidden exam-shell">
+        <div class="exam-card">
+          <div class="exam-head">
+            <div class="exam-brand">M.J.O.F</div>
+            <h1 id="examTitle" class="exam-title">—</h1>
+            <div class="exam-meta">
+              <span id="examTimer" class="exam-chip">—</span>
+              <span id="examProgress" class="exam-chip accent">Савол 0 / 0</span>
+            </div>
+          </div>
+          <div id="examQuestionPane" class="exam-body"></div>
+          <div class="exam-nav">
+            <button type="button" id="examPrevBtn" class="btn ghost">← Пештар</button>
+            <div id="examDots" class="exam-dots" aria-hidden="true"></div>
+            <button type="button" id="examNextBtn" class="btn">Баъдӣ →</button>
+          </div>
+          <div class="exam-footer">
+            <button type="button" id="submitExamBtn" class="btn primary exam-submit">Супоридан</button>
+            <p id="examMsg" class="msg hidden"></p>
+          </div>
+        </div>
+      </section>
+
+      <section id="resultView" class="hidden">
+        <div class="card highlight center result-card">
+          <h2>Натиҷа</h2>
+          <p class="score-big" id="resultScore">0%</p>
+          <p id="resultDetail"></p>
+          <p id="resultStatus" class="badge"></p>
+          <button id="backToListBtn" type="button" class="btn">Бозгашт</button>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/student.js"></script>
+</body>
+</html>
