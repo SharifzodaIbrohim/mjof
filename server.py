@@ -72,6 +72,8 @@ _EXTRA_PUBLIC = {
     "js/admin-results-review.js",
     "js/admin-results-click-fix.js",
     "js/admin-export.js",
+    "logo-chap.jpg", "logo-rost.jpg",
+    "data/Аз_тарафи_чап.jpg", "data/Аз_тарафи_рост.jpg",
     "js/_rrgz_0.txt", "js/_rrgz_1.txt", "js/_rrgz_2.txt", "js/_rrgz_3.txt",
     "js/_asr_s0.txt", "js/_asr_s1.txt", "js/_asr_s2.txt", "js/_asr_s3.txt",
     "js/_asr_s4.txt", "js/_asr_s5.txt", "js/_asr_s6.txt", "js/_asr_s7.txt",
