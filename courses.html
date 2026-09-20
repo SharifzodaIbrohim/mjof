@@ -3,33 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Хабарҳо — Маҷмӯаи Олимпиадаҳои Фаннӣ</title>
-  <link rel="stylesheet" href="css/platform.css" />
-  <style>
-    .cs-wrap { max-width: 960px; margin: 0 auto; padding: 1.5rem 1rem 3rem; }
-    .cs-hero h1 { margin: 0 0 0.35rem; font-size: 1.55rem; }
-    .cs-hero p { color: var(--pf-muted); margin: 0 0 1.5rem; }
-    .cs-grid { display: grid; gap: 0.9rem; }
-    .cs-card {
-      background: var(--pf-panel); border: 1px solid var(--pf-line); border-radius: 12px;
-      padding: 1.15rem 1.25rem; box-shadow: var(--pf-shadow);
-    }
-    .cs-card .kind {
-      font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.04em;
-      color: var(--pf-accent); font-weight: 700;
-    }
-    .cs-card h3 { margin: 0.35rem 0; font-size: 1.05rem; }
-    .cs-card p { margin: 0; color: var(--pf-muted); font-size: 0.9rem; line-height: 1.5; }
-    .cs-card a {
-      display: inline-block; margin-top: 0.65rem; color: #fff; background: var(--pf-accent);
-      text-decoration: none; font-weight: 600; font-size: 0.85rem;
-      padding: 0.45rem 0.85rem; border-radius: 8px;
-    }
-    .cs-empty { color: var(--pf-muted); padding: 2.5rem 1rem; text-align: center;
-      background: var(--pf-panel); border: 1px dashed var(--pf-line); border-radius: 12px; }
-  </style>
+  <title>Хабарҳо — M.J.O.F</title>
+  <link rel="stylesheet" href="/css/platform.css" />
+  <link rel="stylesheet" href="/css/news.css" />
 </head>
-<body class="pf-page-courses">
+<body class="pf-page-news">
   <header class="pf-topbar">
     <a class="pf-brand" href="/">
       <span class="pf-brand-mark">МФ</span>
@@ -51,38 +29,45 @@
     </div>
   </header>
 
-  <main class="cs-wrap">
-    <div class="cs-hero">
-      <h1>Хабарҳо ва эълонҳо</h1>
-      <p>Хабарҳо, эълонҳо ва маълумотҳои Маҷмӯаи Олимпиадаҳои Фаннӣ.</p>
+  <section class="nw-hero">
+    <div class="nw-hero-bg" aria-hidden="true"></div>
+    <div class="nw-hero-inner">
+      <p class="nw-kicker">M.J.O.F · Хабарҳо</p>
+      <h1>Хабарҳо, мақолаҳо ва эълонҳо</h1>
+      <p class="nw-lead">Навгониҳо, мақолаҳои фаннӣ ва эълонҳои расмии Маҷмӯаи Олимпиадаҳои Фаннӣ.</p>
+      <div class="nw-filters" id="nwFilters">
+        <button type="button" class="nw-chip active" data-type="">Ҳама</button>
+        <button type="button" class="nw-chip" data-type="news">Хабар</button>
+        <button type="button" class="nw-chip" data-type="article">Мақола</button>
+        <button type="button" class="nw-chip" data-type="magazine">Маҷалла</button>
+        <button type="button" class="nw-chip" data-type="announcement">Эълон</button>
+      </div>
     </div>
-    <div id="csGrid" class="cs-grid"></div>
-    <p id="csEmpty" class="cs-empty hidden">Ҳоло хабар нест.</p>
+  </section>
+
+  <main class="nw-main">
+    <div id="nwFeatured" class="nw-featured hidden"></div>
+    <div id="nwGrid" class="nw-grid"></div>
+    <p id="nwEmpty" class="nw-empty hidden">Ҳоло хабар нест. Ба зудӣ навгониҳо нашр мешаванд.</p>
   </main>
 
-  <script src="js/i18n.js"></script>
-  <script src="js/platform.js"></script>
-  <script>
-  (() => {
-    const grid = document.getElementById('csGrid');
-    const empty = document.getElementById('csEmpty');
-    function esc(s) {
-      return String(s || '').replace(/[&<>"']/g, c => ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c]));
-    }
-    fetch('/api/content').then(r => r.json()).then(d => {
-      const items = d.items || [];
-      if (!items.length) {
-        empty.classList.remove('hidden');
-        return;
-      }
-      empty.classList.add('hidden');
-      grid.innerHTML = items.map(i => {
-        const url = i.url || '#';
-        const open = url && url !== '#' ? '<a href="' + esc(url) + '" target="_blank" rel="noopener">Муфассал →</a>' : '';
-        return '<article class="cs-card"><span class="kind">Хабар</span><h3>' + esc(i.title) + '</h3><p>' + esc(i.description || '') + '</p>' + open + '</article>';
-      }).join('');
-    }).catch(() => { empty.classList.remove('hidden'); });
-  })();
-  </script>
+  <div id="nwModal" class="nw-modal hidden" role="dialog" aria-modal="true" aria-labelledby="nwModalTitle">
+    <div class="nw-modal-backdrop" data-close></div>
+    <article class="nw-modal-card">
+      <button type="button" class="nw-modal-close" data-close aria-label="Пӯшидан">×</button>
+      <div id="nwModalCover" class="nw-modal-cover hidden"></div>
+      <div class="nw-modal-body">
+        <span id="nwModalKind" class="nw-badge"></span>
+        <h2 id="nwModalTitle"></h2>
+        <p id="nwModalMeta" class="nw-meta"></p>
+        <div id="nwModalText" class="nw-article-text"></div>
+        <p id="nwModalLink" class="nw-modal-link hidden"></p>
+      </div>
+    </article>
+  </div>
+
+  <script src="/js/i18n.js"></script>
+  <script src="/js/platform.js"></script>
+  <script src="/js/news.js"></script>
 </body>
 </html>
