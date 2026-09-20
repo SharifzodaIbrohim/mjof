@@ -1,4 +1,4 @@
-"""Public + admin routes for Courses content."""
+"""Public + admin content/news API routes."""
 from __future__ import annotations
 
 from flask import jsonify, request
@@ -12,10 +12,26 @@ def register_content_routes(app, require_perm, require_admin):
         try:
             kind = request.args.get("type") or None
             lang = request.args.get("lang") or None
-            items = content_api.list_content(kind=kind, lang=lang)
+            featured = request.args.get("featured") in ("1", "true", "yes")
+            items = content_api.list_content(
+                kind=kind,
+                lang=lang,
+                published_only=True,
+                featured_only=featured,
+            )
             return jsonify({"items": items, "count": len(items)})
         except Exception as e:
             return jsonify({"items": [], "count": 0, "error": str(e)}), 200
+
+    @app.get("/api/content/<item_id>")
+    def public_content_one(item_id: str):
+        try:
+            item = content_api.get_content(item_id)
+            if not item or not item.get("published"):
+                return jsonify({"error": "Ёфт нашуд."}), 404
+            return jsonify({"item": item})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
 
     @app.get("/api/admin/content")
     def admin_list_content():
@@ -52,11 +68,42 @@ def register_content_routes(app, require_perm, require_admin):
         payload = request.get_json(silent=True) or {}
         try:
             item = content_api.add_content(payload)
-        except ValueError:
-            return jsonify({"error": "Унвон лозим аст."}), 400
+        except ValueError as e:
+            msg = str(e)
+            if msg == "title_required":
+                return jsonify({"error": "Унвон лозим аст."}), 400
+            if msg == "image_too_large":
+                return jsonify({"error": "Акс хеле калон аст (макс. ~1 МБ)."}), 400
+            return jsonify({"error": msg}), 400
         except Exception as e:
             return jsonify({"error": str(e)}), 500
         return jsonify({"item": item}), 201
+
+    @app.put("/api/admin/content/<item_id>")
+    def admin_update_content(item_id: str):
+        try:
+            admin = require_perm("content.write", "admins.write")
+        except Exception:
+            admin = None
+        if admin is None:
+            try:
+                admin = require_admin()
+            except Exception:
+                admin = None
+        if not admin:
+            return jsonify({"error": "Дастрасӣ рад шуд."}), 401
+        payload = request.get_json(silent=True) or {}
+        try:
+            item = content_api.update_content(item_id, payload)
+        except ValueError as e:
+            if str(e) == "image_too_large":
+                return jsonify({"error": "Акс хеле калон аст (макс. ~1 МБ)."}), 400
+            return jsonify({"error": str(e)}), 400
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+        if not item:
+            return jsonify({"error": "Ёфт нашуд."}), 404
+        return jsonify({"item": item})
 
     @app.delete("/api/admin/content/<item_id>")
     def admin_del_content(item_id: str):
