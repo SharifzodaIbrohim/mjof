@@ -13,7 +13,11 @@
   var coverDataUrl = "";
 
   function tokenHeaders() {
-    var t = localStorage.getItem("adminToken") || localStorage.getItem("mjof_admin_token") || "";
+    // Must match admin.js TOKEN_KEY
+    var t = localStorage.getItem("geo_admin_token")
+      || localStorage.getItem("adminToken")
+      || localStorage.getItem("mjof_admin_token")
+      || "";
     var h = { "Content-Type": "application/json" };
     if (t) h["X-Admin-Token"] = t;
     return h;
@@ -78,6 +82,10 @@
     fetch("/api/admin/content", { headers: tokenHeaders(), credentials: "same-origin", cache: "no-store" })
       .then(function (r) { return r.json(); })
       .then(function (d) {
+        if (d.error && !d.items) {
+          tbody.innerHTML = '<tr><td colspan="5" style="color:#b91c1c;text-align:center;padding:1.5rem">' + esc(d.error) + ' — дубора ворид шавед</td></tr>';
+          return;
+        }
         var items = d.items || [];
         if (!items.length) {
           tbody.innerHTML = '<tr><td colspan="5" style="color:#8494a7;text-align:center;padding:1.5rem">Ҳанӯз контент нест</td></tr>';

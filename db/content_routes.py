@@ -6,6 +6,22 @@ from flask import jsonify, request
 from db import content_api
 
 
+def _auth_admin(require_perm, require_admin, *perms):
+    """Return admin if token valid. Prefer perm check, always allow any authenticated admin as fallback."""
+    admin = None
+    try:
+        if require_perm and perms:
+            admin = require_perm(*perms)
+    except Exception:
+        admin = None
+    if not admin:
+        try:
+            admin = require_admin() if require_admin else None
+        except Exception:
+            admin = None
+    return admin if admin else None
+
+
 def register_content_routes(app, require_perm, require_admin):
     @app.get("/api/content")
     def public_content():
@@ -35,15 +51,7 @@ def register_content_routes(app, require_perm, require_admin):
 
     @app.get("/api/admin/content")
     def admin_list_content():
-        try:
-            admin = require_perm("content.write", "monitor.read", "students.read")
-        except Exception:
-            admin = None
-        if admin is None:
-            try:
-                admin = require_admin()
-            except Exception:
-                admin = None
+        admin = _auth_admin(require_perm, require_admin, "content.write", "content.read", "monitor.read", "students.read")
         if not admin:
             return jsonify({"error": "Дастрасӣ рад шуд."}), 401
         try:
@@ -54,17 +62,9 @@ def register_content_routes(app, require_perm, require_admin):
 
     @app.post("/api/admin/content")
     def admin_add_content():
-        try:
-            admin = require_perm("content.write", "admins.write")
-        except Exception:
-            admin = None
-        if admin is None:
-            try:
-                admin = require_admin()
-            except Exception:
-                admin = None
+        admin = _auth_admin(require_perm, require_admin, "content.write", "admins.write")
         if not admin:
-            return jsonify({"error": "Дастрасӣ рад шуд."}), 401
+            return jsonify({"error": "Дастрасӣ рад шуд. Аввал дубора ворид шавед."}), 401
         payload = request.get_json(silent=True) or {}
         try:
             item = content_api.add_content(payload)
@@ -81,17 +81,9 @@ def register_content_routes(app, require_perm, require_admin):
 
     @app.put("/api/admin/content/<item_id>")
     def admin_update_content(item_id: str):
-        try:
-            admin = require_perm("content.write", "admins.write")
-        except Exception:
-            admin = None
-        if admin is None:
-            try:
-                admin = require_admin()
-            except Exception:
-                admin = None
+        admin = _auth_admin(require_perm, require_admin, "content.write", "admins.write")
         if not admin:
-            return jsonify({"error": "Дастрасӣ рад шуд."}), 401
+            return jsonify({"error": "Дастрасӣ рад шуд. Аввал дубора ворид шавед."}), 401
         payload = request.get_json(silent=True) or {}
         try:
             item = content_api.update_content(item_id, payload)
@@ -107,10 +99,7 @@ def register_content_routes(app, require_perm, require_admin):
 
     @app.delete("/api/admin/content/<item_id>")
     def admin_del_content(item_id: str):
-        try:
-            admin = require_admin()
-        except Exception:
-            admin = None
+        admin = _auth_admin(require_perm, require_admin, "content.write", "admins.write")
         if not admin:
             return jsonify({"error": "Дастрасӣ рад шуд."}), 401
         try:
