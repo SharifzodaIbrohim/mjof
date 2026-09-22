@@ -59,7 +59,7 @@
       </div>
       <div>
         <span class="pf-metric-label">Фанҳо</span>
-        <span class="pf-metric-value" id="pfMSubjects">+</span>
+        <span class="pf-metric-value" id="pfMSubjects">—</span>
       </div>
     </div>
 
@@ -135,6 +135,13 @@
           +'<p>'+esc(it.summary||it.body||'').slice(0,120)+'</p>'
           +'<span class="pf-tag">'+esc(TYPE[it.type]||'Хабар')+'</span></a>';
       }).join('');
+      if (document.body.classList.contains('pf-anim-ready')) {
+        grid.querySelectorAll('.pf-card').forEach(function(card){
+          card.style.animation = 'none';
+          void card.offsetWidth;
+          card.style.animation = '';
+        });
+      }
     }).catch(function(){});
   })();
   </script>
