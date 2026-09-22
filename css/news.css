@@ -253,3 +253,28 @@ body.dark-theme .nw-badge.article { background: rgba(99,102,241,.2); color: #a5b
 body.dark-theme .nw-badge.magazine { background: rgba(236,72,153,.2); color: #f9a8d4; }
 body.dark-theme .nw-badge.announcement { background: rgba(245,158,11,.2); color: #fcd34d; }
 body.dark-theme .nw-card:hover { border-color: #3b82f6; }
+
+/* Phone only — desktop unchanged */
+@media (max-width: 760px) {
+  .nw-hero { padding: 2.2rem 1rem 2rem; }
+  .nw-hero h1 { font-size: 1.35rem; }
+  .nw-lead { font-size: 0.9rem; margin-bottom: 1.15rem; }
+  .nw-chip { padding: 0.4rem 0.85rem; font-size: 0.8rem; }
+  .nw-main { margin-top: -1.1rem; padding: 0 0.85rem 2.5rem; }
+  .nw-grid { grid-template-columns: 1fr; gap: 0.9rem; }
+  .nw-card { border-radius: 14px; }
+  .nw-card-cover-wrap, .nw-card-cover { height: 150px; }
+  .nw-card-body { padding: 1rem 1rem 1.1rem; }
+  .nw-card-body h3 { font-size: 1rem; }
+  .nw-featured { border-radius: 14px; min-height: 0; }
+  .nw-featured-body { padding: 1.15rem 1.15rem 1.35rem; }
+  .nw-featured-body h2 { font-size: 1.15rem; }
+  .nw-modal-card { max-height: 92vh; border-radius: 14px; }
+  .nw-modal-cover { height: 160px; }
+  .nw-modal-body { padding: 1.15rem 1.1rem 1.5rem; }
+  .nw-modal-body h2 { font-size: 1.2rem; }
+}
+@media (max-width: 400px) {
+  .nw-filters { gap: 0.35rem; }
+  .nw-chip { padding: 0.36rem 0.7rem; font-size: 0.76rem; }
+}
