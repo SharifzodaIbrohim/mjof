@@ -278,3 +278,11 @@ body.dark-theme .nw-card:hover { border-color: #3b82f6; }
   .nw-filters { gap: 0.35rem; }
   .nw-chip { padding: 0.36rem 0.7rem; font-size: 0.76rem; }
 }
+
+/* Bottom-nav clearance on mobile */
+@media (max-width: 900px) {
+  .nw-main {
+    padding-bottom: calc(64px + 24px + env(safe-area-inset-bottom)) !important;
+  }
+  .nw-hero { padding-top: 1.75rem; }
+}
