@@ -7,12 +7,35 @@
   }
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, (c) =>
-      ({ '&': '&', '<': '<', '>': '>', '"': '"', "'": '&#39;' }[c])
+      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])
     );
   }
   function set(id, v) {
     const el = document.getElementById(id);
     if (el) el.textContent = v;
+  }
+
+  function animateCount(el, target, durationMs) {
+    if (!el) return;
+    const end = Math.max(0, Math.floor(Number(target) || 0));
+    const startTs = performance.now();
+    const dur = Math.max(400, durationMs || 1100);
+    el.classList.add('pf-counting');
+
+    function frame(now) {
+      const p = Math.min(1, (now - startTs) / dur);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = Math.round(eased * end);
+      el.textContent = String(val);
+      if (p < 1) {
+        requestAnimationFrame(frame);
+      } else {
+        el.textContent = String(end);
+        el.classList.remove('pf-counting');
+      }
+    }
+    el.textContent = '0';
+    requestAnimationFrame(frame);
   }
 
   async function loadHome() {
@@ -46,10 +69,26 @@
         quizzes.push(q);
       }
 
+      const studentCount = (statsRes && statsRes.students) != null ? Number(statsRes.students) || 0 : 0;
+      const olyCount = olympiads.length;
+      const subjectCount = 13;
+
+      const elO = document.getElementById('pfMOlympiads');
+      const elS = document.getElementById('pfMStudents');
+      const elSub = document.getElementById('pfMSubjects');
+
+      if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        set('pfMOlympiads', String(olyCount));
+        set('pfMStudents', String(studentCount));
+        set('pfMSubjects', String(subjectCount));
+      } else {
+        animateCount(elO, olyCount, 1000);
+        animateCount(elS, studentCount, 1200);
+        animateCount(elSub, subjectCount, 1400);
+      }
+
       set('pfMQuizzes', String(quizzes.length));
-      set('pfMOlympiads', String(olympiads.length));
       set('pfMCountries', '195+');
-      set('pfMStudents', String((statsRes && statsRes.students) != null ? statsRes.students : '—'));
 
       const qBox = document.getElementById('pfFeaturedQuizzes');
       if (qBox) {
@@ -138,6 +177,7 @@
   }
 
   function boot() {
+    document.body.classList.add('pf-anim-ready');
     loadHome();
     if (window.GeoI18n && window.GeoI18n.onLang) {
       window.GeoI18n.onLang(function () { loadHome(); });
