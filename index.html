@@ -124,7 +124,7 @@
   (function(){
     var grid = document.getElementById('homeNewsGrid');
     if (!grid) return;
-    function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+    function esc(s){return String(s||'').replace(/[&<>"']/g,function(c){return {'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'}[c];});}
     var TYPE={news:'Хабар',article:'Мақола',magazine:'Маҷалла',announcement:'Эълон',link:'Пайванд'};
     fetch('/api/content',{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
       var items=(d.items||[]).slice(0,3);
@@ -145,5 +145,16 @@
     }).catch(function(){});
   })();
   </script>
+
+  <!-- Mobile bottom navigation -->
+  <nav class="pf-bottom-nav" aria-label="Асосӣ">
+    <div class="pf-bottom-nav-inner">
+      <a href="/" class="active" data-nav="home"><span class="bn-ico" aria-hidden="true">🏠</span><span>Хона</span></a>
+      <a href="/student" class="" data-nav="oly"><span class="bn-ico" aria-hidden="true">🏆</span><span>Олимпиадаҳо</span></a>
+      <a href="/leaderboard" class="" data-nav="lb"><span class="bn-ico" aria-hidden="true">⭐</span><span>Рейтинг</span></a>
+      <a href="/courses" class="" data-nav="news"><span class="bn-ico" aria-hidden="true">📰</span><span>Хабарҳо</span></a>
+    </div>
+  </nav>
+
 </body>
 </html>
