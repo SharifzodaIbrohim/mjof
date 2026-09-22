@@ -35,6 +35,8 @@
     @media (max-width: 640px) {
       .podium { grid-template-columns: 1fr; }
       .pod.p1, .pod.p2, .pod.p3 { order: 0; transform: none; }
+      .lb-table { font-size: 0.85rem; }
+      .lb-table th, .lb-table td { padding: 0.65rem 0.5rem; }
     }
   </style>
 </head>
@@ -128,5 +130,16 @@
     else load();
   })();
   </script>
+
+  <!-- Mobile bottom navigation -->
+  <nav class="pf-bottom-nav" aria-label="Асосӣ">
+    <div class="pf-bottom-nav-inner">
+      <a href="/" class="" data-nav="home"><span class="bn-ico" aria-hidden="true">🏠</span><span>Хона</span></a>
+      <a href="/student" class="" data-nav="oly"><span class="bn-ico" aria-hidden="true">🏆</span><span>Олимпиадаҳо</span></a>
+      <a href="/leaderboard" class="active" data-nav="lb"><span class="bn-ico" aria-hidden="true">⭐</span><span>Рейтинг</span></a>
+      <a href="/courses" class="" data-nav="news"><span class="bn-ico" aria-hidden="true">📰</span><span>Хабарҳо</span></a>
+    </div>
+  </nav>
+
 </body>
 </html>
